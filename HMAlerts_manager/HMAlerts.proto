@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+service AlertManager{
+	rpc setAlert (hmAlert) returns (hmResponse) {}
+	rpc suspendAlert (hmAlert) returns (hmResponse) {}
+	rpc unsuspendAlert (hmAlert) returns (hmResponse) {}
+	rpc dismissAlert (hmAlert) returns (hmResponse)  {}
+	rpc reactivateAlert (hmAlert) returns (hmResponse)  {}
+	rpc getAlert (hmAlert) returns (hmResponse)  {}
+}
+
+
+message hmAlert{
+	string hm_alert_id = 1;
+	string hm_message = 2;
+	string hm_status = 3;
+	int32 hm_suspend_for = 4;
+	string hm_agent = 5;
+}
+
+message hmResponse{
+	string content = 1;
+}
+
+
+
+
+
