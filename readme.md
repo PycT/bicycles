@@ -1,5 +1,5 @@
+https://github.com/PycT/bicycles
 
-
-Ecah folder is a separate bicycle. :P
+Each folder is a separate bicycle. :P
 
 
