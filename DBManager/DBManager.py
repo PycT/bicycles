@@ -33,7 +33,7 @@ class DBManager:
 
 		timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S');
 		record = '\{"timestamp":{}, "user":{}, "operation":{}, "collection":{}, "data":{}\}'.format(timestamp, user, operation, self.collection, data);
-		self.db.DBJournal.insert_one.(record);
+		self.db.DBJournal.insert_one(record);
 		pass;
 
 	def request(self, operation, data, sort = None, log = False):
