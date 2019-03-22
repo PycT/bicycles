@@ -31,7 +31,7 @@ class DBManager:
 
 	def logAction(self, operation, data, user = self.user):
 
-		timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S');
+		timestamp = str(datetime.datetime.now());
 		record = '\{"timestamp":{}, "user":{}, "operation":{}, "collection":{}, "data":{}\}'.format(timestamp, user, operation, self.collection, data);
 		self.db.DBJournal.insert_one(record);
 		pass;
