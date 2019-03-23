@@ -24,7 +24,6 @@ from DBManager import DBManager;
 }
 
 "email" field is also used as login.
-"status" field is also used to confirm email.
 """
 
 
@@ -86,7 +85,7 @@ class UserManager:
 		user_data["password"] = makeHash(user_data["password"]);
 		user_data["date.creation"] = getTimeStamp();
 		user_data["date.update"] = user_data["date.creation"];
-		user_data["status"] = makeHash(getTimeStamp() + user_data["password"] + user_data["email"]);
+		user_data["status"] = "Pending email confirmation";
 		user_data["field.utility"] = makeHash(user_data["email"] + user_data["date.update"]);
 		user_data["creation_status"] = "Ok";
 
@@ -109,6 +108,17 @@ class UserManager:
 		else:
 			return False;
 
+	def loginState(self, user_data):
+		"""
+		checking credentials, return false if no match.
+		if the user_data['password'] hash is stored in temporary cookie, no need to call hashinfg method each time.
+		user_data HAS to contain "email" field [used as login here]
+		"""
+		if self.db.request("getOne", user_data):
+			return True;
+		else:
+			return False;
+
 	def confirmEmail(self, secret_hash):
 		"""
 		secret_hash is generated when creating user or updating user's email and sent to that email.
@@ -116,12 +126,12 @@ class UserManager:
 		"""
 
 		the_data = {};
-		the_data["status"] = secret_hash;
+		the_data["field.utility"] = secret_hash;
 
 		result = self.db.request("getOne", the_data);
 
 		if result:
-			data_prime = self.db.getData(the_data, "Ok");
+			data_prime = self.db.getData(result["_id"], {"status": "Ok"});
 
 			result2 = self.db.request("update", data_prime);
 
@@ -133,3 +143,67 @@ class UserManager:
 		else:
 			return False;
 
+	def updateUser(self, new_data): #new_data is a dict with new fields
+		"""
+		a method to update user data 
+		"""
+
+		the_data = {};
+		the_data["email"] = self.email;
+		
+		new_data["date.update"] = getTimeStamp();
+
+		data_prime = self.db.getData(the_data, new_data);
+
+		result = self.db.request("update", data_prime);
+
+		if result:
+			return new_data;
+		else:
+			return False;
+
+	def restoreRequest(self, email):
+		"""
+		a method to place a secret hash to the db to restore when user visits secret link.
+		"""
+		result = self.db.request("getOne", {"email": email});
+		if result:
+			new_data = {};
+			new_data["field.utility"] = makeHash(email + getTimeStamp() + result["password"]);
+
+			data_prime = self.db.getData(result["_id"], new_data);
+
+			result2 = self.db.request("update", data_prime);
+
+			if result2:
+				return "Ok";
+			else:
+				return False;
+
+		else:
+			return False;
+
+	def restorePassword(self, secret_hash, new_password):
+		"""
+		method to restore password after checking the secret.
+		the call of restoreRequest earlier is presumed.
+		"""
+
+		result = self.db.request("getOne", {"field.utility": secret_hash});
+
+		if result:
+			new_data = {};
+			new_data["password"] = makeHash(new_password);
+			new_data["field.utility"] = "";
+
+			data_prime = self.db.getData(result["_id"], new_data);
+
+			result2 = self.db.request("update", data_prime);
+
+			if result2:
+				return "Ok";
+			else:
+				return False;
+
+		else:
+			return False;
