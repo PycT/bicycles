@@ -1,1 +1,1 @@
-https://github.com/PycT/bicycles
+git@github.com:PycT/bicycles.git
