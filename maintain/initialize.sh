@@ -1,7 +1,7 @@
 #nividia driver
 sudo apt-add-repository ppa:graphics-drivers/ppa
 sudo apt update
-sudo apt install -y nvidia-drivers-390
+sudo apt install -y nvidia-driver-390
 
 #git
 sudo apt install -y git
