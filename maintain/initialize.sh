@@ -9,17 +9,11 @@ sudo apt install -y git
 #curl
 sudo apt install -y curl
 
-#zsh
-sudo apt install -y zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-chsh -s /bin/zsh
-
-
 #vim
 sudo apt install -y vim
 
 #pip3
-sudo apt install -y pythin3-pip
+sudo apt install -y python3-pip
 
 #virtualenv
 pip3 install virtualenv
@@ -54,4 +48,9 @@ sudo apt install -y docker-ce docker-ce-cli containerd.io
 
 #openvpn
 sudo apt install network-manager-openvpn-gnome
+
+#zsh
+sudo apt install -y zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+chsh -s /bin/zsh
 
